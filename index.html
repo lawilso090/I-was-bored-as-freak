@@ -1,51 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Website with Wireframe & Game</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>REXON PAID</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    overflow: hidden;
+    background: #4B0082;
+    color: #D8BFD8;
+    font-family: Arial, sans-serif;
+  }
+  canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: 0;
+  }
+  #content {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px;
+    text-align: center;
+    padding: 20px;
+    z-index: 5;
+    text-shadow: 0 0 5px #00000099;
+  }
+  #status {
+    position: fixed;
+    bottom: 20px; left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #D8BFD8;
+    user-select: none;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .status-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #32CD32;
+    box-shadow: 0 0 6px 2px #32CD32AA;
+  }
+  /* Buttons container */
+  .buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  /* Button styles */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #000000;
+    color: #ffffff;
+    width: 180px;
+    height: 60px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 25px;
+    border: 3px solid #ffffff;
+    box-shadow: none;
+    transition: border-color 0.3s, box-shadow 0.3s, color 0.3s;
+    cursor: pointer;
+  }
+  .btn:hover {
+    border-color: #FFADFF;
+    box-shadow: 0 0 20px #FFADFF;
+    color: #FFADFF;
+    background: #000000;
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>My Website</h1>
-    <nav>
-      <button onclick="showSection('website')">Website</button>
-      <button onclick="showSection('wireframe')">Wireframe</button>
-      <button onclick="showSection('game')">Game</button>
-    </nav>
-  </header>
+<canvas id="bg"></canvas>
 
-  <main>
-    <!-- Website Section -->
-    <section id="website" class="active">
-      <h2>Welcome</h2>
-      <p>This is the polished version of the website.</p>
-    </section>
+<div id="content">
+  <h1>REXON PAID</h1>
+  <p>Rexon Paid Has Countless Mods Such As Kick Gun, Crash Gun, Crash All, Tag Gun, Tag All, Ban Gun, etc</p>
 
-    <!-- Wireframe Section -->
-    <section id="wireframe">
-      <div class="wireframe-box">Header</div>
-      <div class="wireframe-box">Navigation</div>
-      <div class="wireframe-box">Content</div>
-      <div class="wireframe-box">Footer</div>
-    </section>
+  <div class="buttons">
+    <button class="btn" id="downloadBtn">Download</button>
+</div>
 
-    <!-- Game Section -->
-    <section id="game">
-      <h2>Dodge! (Mini Game)</h2>
-      <canvas id="gameCanvas" width="400" height="400"></canvas>
-      <p>Use arrow keys or buttons below. Dodge falling blocks!</p>
-      <div class="controls">
-        <button id="leftBtn">◀</button>
-        <div class="vertical">
-          <button id="upBtn">▲</button>
-          <button id="downBtn">▼</button>
-        </div>
-        <button id="rightBtn">▶</button>
-      </div>
-    </section>
-  </main>
+<div id="status">
+  <span class="status-circle"></span>Undetected
+</div>
 
-  <script src="script.js"></script>
+<script>
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+
+  let particles = [];
+  let mouse = { x: null, y: null };
+
+  for (let i = 0; i < 200; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5
+    });
+  }
+
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  window.addEventListener('resize', () => {
+    resize();
+  });
+
+  function draw() {
+    ctx.fillStyle = '#4B0082';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < particles.length; i++) {
+      let p = particles[i];
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = '#D8BFD8';
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        let p2 = particles[j];
+        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(216, 191, 216, ${1 - dist / 120})`;
+          ctx.stroke();
+        }
+      }
+
+      if (mouse.x !== null && mouse.y !== null) {
+        let distMouse = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+        if (distMouse < 180) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(216, 191, 216, ${1 - distMouse / 180})`;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+
+  // Button click handlers
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    window.open('https://discord.gg/q7pVSkrYvF', '_blank');
+  });
+
+  document.getElementById('learnMoreBtn').addEventListener('click', () => {
+    window.open('https://example.com/learn-more', '_blank');
+  });
+</script>
 </body>
 </html>
