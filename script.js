@@ -7,7 +7,7 @@ function showSection(id) {
 // Simple game
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-let player = { x: 180, y: 350, w: 40, h: 40, color: "blue" };
+let player = { x: 180, y: 350, w: 40, h: 40, color: "#22c55e" }; // green player
 let obstacles = [];
 let keys = {};
 let gameOver = false;
@@ -54,7 +54,7 @@ function update() {
 
   // Add obstacles
   if (Math.random() < 0.03) {
-    obstacles.push({ x: Math.random() * 360, y: -20, w: 40, h: 20, color: "red" });
+    obstacles.push({ x: Math.random() * 360, y: -20, w: 40, h: 20, color: "#ef4444" }); // red obstacles
   }
 
   // Move obstacles
@@ -75,11 +75,35 @@ function update() {
   obstacles = obstacles.filter(o => o.y < canvas.height);
 }
 
+function drawGrid() {
+  ctx.strokeStyle = "rgba(255,255,255,0.15)"; // faint white lines
+  ctx.lineWidth = 1;
+  for (let x = 0; x < canvas.width; x += 20) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+  for (let y = 0; y < canvas.height; y += 20) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+}
+
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Background
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Grid overlay
+  drawGrid();
+
   // Player
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.w, player.h);
+
   // Obstacles
   obstacles.forEach(o => {
     ctx.fillStyle = o.color;
