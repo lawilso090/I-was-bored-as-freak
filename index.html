@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Website with Wireframe & Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>My Website</h1>
+    <nav>
+      <button onclick="showSection('website')">Website</button>
+      <button onclick="showSection('wireframe')">Wireframe</button>
+      <button onclick="showSection('game')">Game</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Website Section -->
+    <section id="website" class="active">
+      <h2>Welcome</h2>
+      <p>This is the polished version of the website.</p>
+    </section>
+
+    <!-- Wireframe Section -->
+    <section id="wireframe">
+      <div class="wireframe-box">Header</div>
+      <div class="wireframe-box">Navigation</div>
+      <div class="wireframe-box">Content</div>
+      <div class="wireframe-box">Footer</div>
+    </section>
+
+    <!-- Game Section -->
+    <section id="game">
+      <h2>Dodge! (Mini Game)</h2>
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+      <p>Use arrow keys or buttons below. Dodge falling blocks!</p>
+      <div class="controls">
+        <button id="leftBtn">◀</button>
+        <div class="vertical">
+          <button id="upBtn">▲</button>
+          <button id="downBtn">▼</button>
+        </div>
+        <button id="rightBtn">▶</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
